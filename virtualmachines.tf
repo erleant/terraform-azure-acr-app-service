@@ -11,7 +11,7 @@ resource "azurerm_network_security_group" "corporate-production-nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = 80
-    source_address_prefix      = "188.163.37.169"
+    source_address_prefix      = "$MY_IP"
     destination_address_prefix = "*"
   }
   security_rule {
@@ -22,7 +22,7 @@ resource "azurerm_network_security_group" "corporate-production-nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = 22
-    source_address_prefix      = "188.163.37.169"
+    source_address_prefix      = "$MY_IP"
     destination_address_prefix = "*"
   }
 }
@@ -46,9 +46,9 @@ sudo -i
 apt-get install nginx -y
 apt-get install git -y
 
-git clone https://github.com/lerna/website.git /home/akoret/webapp 
+git clone https://github.com/lerna/website.git /home/$user/webapp 
 
-cp -a /home/akoret/webapp/. /var/www/html/
+cp -a /home/$user/webapp/. /var/www/html/
 sed "s/Documentation | Lerna/`hostname`/" /var/www/html/index.html  > /var/www/index.html 
 rm /var/www//html/index.html 
 cp /var/www/index.html /var/www/html/index.html 
@@ -84,8 +84,8 @@ resource "azurerm_linux_virtual_machine" "corporate-business-linux-vm" {
   }
 
   computer_name                   = "vm-linux-${count.index +1}"
-  admin_username                  = "akoret"
-  admin_password                  = "T56$RGD_fd_(fjGE#!"
+  admin_username                  = "$user"
+  admin_password                  = "$p"
   disable_password_authentication = false
   custom_data                     = base64encode(local.custom_data)
 
